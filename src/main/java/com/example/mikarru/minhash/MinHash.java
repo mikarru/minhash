@@ -55,7 +55,7 @@ public class MinHash {
     }
   }
 
-  public Signature calculateSigneture(int[] features) {
+  public Signature calculateSignature(int[] features) {
     long[] mins = new long[k];
     for (int i = 0; i < k; ++i) {
       long min = Long.MAX_VALUE;

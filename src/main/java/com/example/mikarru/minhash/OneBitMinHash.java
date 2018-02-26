@@ -121,12 +121,12 @@ public class OneBitMinHash {
     }
   }
 
-  public Signature calculateSigneture(int[] features) {
+  public Signature calculateSignature(int[] features) {
     long[] bitVec = calculateBitVec(features);
     return new Signature(k, bitVec);
   }
 
-  public ExactSignature calculateExactSigneture(int[] features) {
+  public ExactSignature calculateExactSignature(int[] features) {
     long[] bitVec = calculateBitVec(features);
     return new ExactSignature(k, bitVec, features.length);
   }

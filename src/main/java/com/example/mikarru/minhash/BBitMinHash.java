@@ -126,7 +126,7 @@ public class BBitMinHash {
     }
   }
 
-  public Signature calculateSigneture(int[] features) {
+  public Signature calculateSignature(int[] features) {
     long[] bitVec = new long[arraySize];
     int arrIndex = 0;
     int bitIndex = 0;
