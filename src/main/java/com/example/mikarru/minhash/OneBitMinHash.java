@@ -17,6 +17,12 @@ public class OneBitMinHash {
       this.featureSize = featureSize;
     }
 
+    /**
+     * Calculate estimated jaccard similarity.
+     *
+     * @param that signature with which to compare.
+     * @return the estimated jaccard similarity.
+     */
     public double calculateSimilarity(ExactSignature that) {
       if (getK() != that.getK()) {
         String msg = "Incomportable signatures: this.k = " +
@@ -56,6 +62,9 @@ public class OneBitMinHash {
       return (double) matched / k;
     }
 
+    /**
+     * Get number of hash functions from which this signature is calculated.
+     */
     public int getK() {
       return k;
     }
@@ -74,6 +83,12 @@ public class OneBitMinHash {
       this.bitVec = bitVec;
     }
 
+    /**
+     * Calculate estimated jaccard similarity.
+     *
+     * @param that signature with which to compare.
+     * @return the estimated jaccard similarity.
+     */
     public double calculateSimilarity(Signature that) {
       if (getK() != that.getK()) {
         String msg = "Incomportable signatures: this.k = " +
@@ -93,19 +108,33 @@ public class OneBitMinHash {
       return (double) matched / k;
     }
 
+    /**
+     * Get number of hash functions from which this signature is calculated.
+     */
     public int getK() {
       return k;
     }
-  }
-
-  public OneBitMinHash(int k) {
-    this(k, 0);
   }
 
   private int k;
   private int arraySize;
   private LongHashFunction[] hashFuncs;
 
+  /**
+   * Constructs a OneBitMinHash with default hashSeed (0).
+   *
+   * @param k number of hash functions. k must be positive and multiples of 64.
+   */
+  public OneBitMinHash(int k) {
+    this(k, 0);
+  }
+
+  /**
+   * Constructs a OneBitMinHash.
+   *
+   * @param k number of hash functions. k must be positive and multiples of 64.
+   * @param hashSeed seed of hash functions.
+   */
   public OneBitMinHash(int k, long hashSeed) {
     if (k <= 0 || k % 64 != 0) {
       throw new IllegalArgumentException("k must be positive and multiples of 64");
@@ -121,6 +150,12 @@ public class OneBitMinHash {
     }
   }
 
+  /**
+   * Calculate Signature from features.
+   *
+   * @param features features.
+   * @return calculated signature.
+   */
   public Signature calculateSignature(int[] features) {
     long[] bitVec = calculateBitVec(features);
     return new Signature(k, bitVec);

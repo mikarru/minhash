@@ -19,6 +19,12 @@ public class BBitMinHash {
       this.featureSize = featureSize;
     }
 
+    /**
+     * Calculate estimated jaccard similarity.
+     *
+     * @param that signature with which to compare.
+     * @return the estimated jaccard similarity.
+     */
     public double calculateSimilarity(Signature that) {
       if (getK() != that.getK() || getB() != that.getB()) {
         String msg = "Incomportable signatures: ";
@@ -68,10 +74,17 @@ public class BBitMinHash {
       return (double) matched / k;
     }
 
+    /**
+     * Get number of hash functions from which this signature is calculated.
+     */
     public int getK() {
       return k;
     }
 
+    /**
+     * Get number of hash functions from which this signature is calculated.
+     * Get number of bits to be exploited when this signature is calculated.
+     */
     public int getB() {
       return b;
     }
@@ -81,10 +94,17 @@ public class BBitMinHash {
     }
   }
 
+  /**
+   * Return true if n is power of 2, else false. Assume n is positive.
+   */
   static boolean isPowerOfTwo(int n) {
     return Integer.bitCount(n) == 1;
   }
 
+  /**
+   * Calculate bit mask used to get lowest b bits.
+   * (when b = 3, return 0x7)
+   */
   static long calculateBitMask(int b) {
     long mask = 0L;
     for (int i = 0; i < b; ++i) {
@@ -94,15 +114,28 @@ public class BBitMinHash {
     return mask;
   }
 
-  public BBitMinHash(int k, int b) {
-    this(k, b, 0);
-  }
-
   private int k;
   private int b;
   private int arraySize;
   private LongHashFunction[] hashFuncs;
 
+  /**
+   * Constructs a BBitMinHash with default hashSeed (0).
+   *
+   * @param k number of hash functions. k must be positive and multiples of 64.
+   * @param b number of bits to exploit from one hash value. b must be positive and divisors of 64.
+   */
+  public BBitMinHash(int k, int b) {
+    this(k, b, 0);
+  }
+
+  /**
+   * Constructs a BBitMinHash with default hashSeed (0).
+   *
+   * @param k number of hash functions. k must be positive and multiples of 64.
+   * @param b number of bits to exploit from one hash value. b must be positive and divisors of 64.
+   * @param hashSeed seed of hash functions.
+   */
   public BBitMinHash(int k, int b, long hashSeed) {
     if (k <= 0) {
       throw new IllegalArgumentException("k must be positive");
@@ -126,6 +159,12 @@ public class BBitMinHash {
     }
   }
 
+  /**
+   * Calculate Signature from features.
+   *
+   * @param features features.
+   * @return calculated signature.
+   */
   public Signature calculateSignature(int[] features) {
     long[] bitVec = new long[arraySize];
     int arrIndex = 0;
