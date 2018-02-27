@@ -14,32 +14,32 @@ public class MinHashTest {
 
     int[] f1 = {0, 1, 2};
     int[] f2 = {0, 1, 2};
-    MinHash.Signature s1 = mh.calculateSigneture(f1);
-    MinHash.Signature s2 = mh.calculateSigneture(f2);
+    MinHash.Signature s1 = mh.calculateSignature(f1);
+    MinHash.Signature s2 = mh.calculateSignature(f2);
     assertEquals(1.0, s1.calculateSimilarity(s2), DELTA);
 
     int[] f3 = {0, 1, 2, 3, 4, 5, 6};
     int[] f4 = {0, 1, 2};
-    MinHash.Signature s3 = mh.calculateSigneture(f3);
-    MinHash.Signature s4 = mh.calculateSigneture(f4);
+    MinHash.Signature s3 = mh.calculateSignature(f3);
+    MinHash.Signature s4 = mh.calculateSignature(f4);
     assertEquals((double)3 / (3 + 4), s3.calculateSimilarity(s4), DELTA);
 
     int[] f5 = {0, 1, 2, 3, 4, 5, 6};
     int[] f6 = {0, 1, 2, 7, 8, 9, 10};
-    MinHash.Signature s5 = mh.calculateSigneture(f5);
-    MinHash.Signature s6 = mh.calculateSigneture(f6);
+    MinHash.Signature s5 = mh.calculateSignature(f5);
+    MinHash.Signature s6 = mh.calculateSignature(f6);
     assertEquals((double)3 / (3 + 4 + 4), s5.calculateSimilarity(s6), DELTA);
 
     int[] f7 = {};
     int[] f8 = {0, 1, 2};
-    MinHash.Signature s7 = mh.calculateSigneture(f7);
-    MinHash.Signature s8 = mh.calculateSigneture(f8);
+    MinHash.Signature s7 = mh.calculateSignature(f7);
+    MinHash.Signature s8 = mh.calculateSignature(f8);
     assertEquals((double)0 / 3, s7.calculateSimilarity(s8), DELTA);
 
     int[] f9 = {};
     int[] f10 = {};
-    MinHash.Signature s9 = mh.calculateSigneture(f9);
-    MinHash.Signature s10 = mh.calculateSigneture(f10);
+    MinHash.Signature s9 = mh.calculateSignature(f9);
+    MinHash.Signature s10 = mh.calculateSignature(f10);
     assertEquals(1.0, s9.calculateSimilarity(s10), DELTA);
   }
 }

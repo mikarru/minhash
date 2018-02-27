@@ -6,18 +6,24 @@ import java.util.Random;
 import net.openhft.hashing.LongHashFunction;
 
 public class OneBitMinHash {
-  public static class Signature implements Serializable {
+  public static class ExactSignature implements Serializable {
     private int k;
     private long[] bitVec;
     private int featureSize;
 
-    Signature(int k, long[] bitVec, int featureSize) {
+    ExactSignature(int k, long[] bitVec, int featureSize) {
       this.k = k;
       this.bitVec = bitVec;
       this.featureSize = featureSize;
     }
 
-    public double calculateSimilarity(Signature that) {
+    /**
+     * Calculate estimated jaccard similarity.
+     *
+     * @param that signature with which to compare.
+     * @return the estimated jaccard similarity.
+     */
+    public double calculateSimilarity(ExactSignature that) {
       if (getK() != that.getK()) {
         String msg = "Incomportable signatures: this.k = " +
           getK() + ", that.k = " + that.getK();
@@ -47,7 +53,7 @@ public class OneBitMinHash {
       return (p - c1) / (1.0 - c2);
     }
 
-    private double calculateP(Signature that) {
+    private double calculateP(ExactSignature that) {
       int matched = 0;
       for (int i = 0; i < bitVec.length; ++i) {
         long xor = bitVec[i] ^ that.bitVec[i];
@@ -56,6 +62,9 @@ public class OneBitMinHash {
       return (double) matched / k;
     }
 
+    /**
+     * Get number of hash functions from which this signature is calculated.
+     */
     public int getK() {
       return k;
     }
@@ -65,14 +74,67 @@ public class OneBitMinHash {
     }
   }
 
-  public OneBitMinHash(int k) {
-    this(k, 0);
+  public static class Signature implements Serializable {
+    private int k;
+    private long[] bitVec;
+
+    Signature(int k, long[] bitVec) {
+      this.k = k;
+      this.bitVec = bitVec;
+    }
+
+    /**
+     * Calculate estimated jaccard similarity.
+     *
+     * @param that signature with which to compare.
+     * @return the estimated jaccard similarity.
+     */
+    public double calculateSimilarity(Signature that) {
+      if (getK() != that.getK()) {
+        String msg = "Incomportable signatures: this.k = " +
+          getK() + ", that.k = " + that.getK();
+        throw new IllegalArgumentException(msg);
+      }
+      double p = calculateP(that);
+      return 2.0 * p - 1.0;
+    }
+
+    private double calculateP(Signature that) {
+      int matched = 0;
+      for (int i = 0; i < bitVec.length; ++i) {
+        long xor = bitVec[i] ^ that.bitVec[i];
+        matched += (64 - Long.bitCount(xor));
+      }
+      return (double) matched / k;
+    }
+
+    /**
+     * Get number of hash functions from which this signature is calculated.
+     */
+    public int getK() {
+      return k;
+    }
   }
 
   private int k;
   private int arraySize;
   private LongHashFunction[] hashFuncs;
 
+  /**
+   * Constructs a OneBitMinHash with default hashSeed (0).
+   *
+   * @param k number of hash functions. k must be positive and multiples of 64.
+   */
+  public OneBitMinHash(int k) {
+    this(k, 0);
+  }
+
+  /**
+   * Constructs a OneBitMinHash.
+   *
+   * @param k number of hash functions. k must be positive and multiples of 64.
+   * @param hashSeed seed of hash functions.
+   */
   public OneBitMinHash(int k, long hashSeed) {
     if (k <= 0 || k % 64 != 0) {
       throw new IllegalArgumentException("k must be positive and multiples of 64");
@@ -88,7 +150,23 @@ public class OneBitMinHash {
     }
   }
 
-  public Signature calculateSigneture(int[] features) {
+  /**
+   * Calculate Signature from features.
+   *
+   * @param features features.
+   * @return calculated signature.
+   */
+  public Signature calculateSignature(int[] features) {
+    long[] bitVec = calculateBitVec(features);
+    return new Signature(k, bitVec);
+  }
+
+  public ExactSignature calculateExactSignature(int[] features) {
+    long[] bitVec = calculateBitVec(features);
+    return new ExactSignature(k, bitVec, features.length);
+  }
+
+  private long[] calculateBitVec(int[] features) {
     long[] bitVec = new long[arraySize];
     int arrIndex = 0;
     int bitIndex = 0;
@@ -107,6 +185,6 @@ public class OneBitMinHash {
         bitIndex = 0;
       }
     }
-    return new Signature(k, bitVec, features.length);
+    return bitVec;
   }
 }
