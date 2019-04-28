@@ -1,4 +1,4 @@
-package com.example.mikkaru.minhash;
+package com.example.mikarru.minhash;
 
 import java.io.Serializable;
 import java.util.Random;

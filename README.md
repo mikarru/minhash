@@ -7,7 +7,7 @@ This is a simple implementation of MinHash and b-bit MinHash.
 ### MinHash
 
 ```java
-import com.example.mikkaru.minhash.MinHash;
+import com.example.mikarru.minhash.MinHash;
 
 int k = 64;
 MinHash mh = new MinHash(k);
@@ -23,7 +23,7 @@ System.out.println(sim); // => 0.640625. Actual jaccard similarity is 6/9 = 0.66
 ### b-bit MinHash
 
 ```java
-import com.example.mikkaru.minhash.BBitMinHash;
+import com.example.mikarru.minhash.BBitMinHash;
 
 int k = 256;
 int b = 4;
@@ -41,7 +41,7 @@ Specialized implementation of b-bit MinHash with b = 1.
 This implementation is more efficient than that of non specialized version with b = 1.
 
 ```java
-import com.example.mikkaru.minhash.OneBitMinHash;
+import com.example.mikarru.minhash.OneBitMinHash;
 
 int k = 256;
 OneBitMinHash mh = new OneBitMinHash(k);
