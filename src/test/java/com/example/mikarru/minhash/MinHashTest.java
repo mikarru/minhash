@@ -1,4 +1,4 @@
-package com.example.mikkaru.minhash;
+package com.example.mikarru.minhash;
 
 import static org.junit.Assert.assertEquals;
 
